@@ -51,9 +51,9 @@ const Country = ({ country }) => {
       <div>capital {country.data.capital} </div>
       <div>population {country.data.population}</div>
       <img
-        src={country.data.flag}
+        src={country.data.flags.png}
         height="100"
-        alt={`flag of ${country.data.name}`}
+        alt={`flag of ${country.data.name.official}`}
       />
     </div>
   );

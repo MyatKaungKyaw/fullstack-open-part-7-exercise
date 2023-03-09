@@ -41,10 +41,6 @@ const Country = ({ country }) => {
     return null;
   }
 
-  // if (!country.found) {
-  //   return <div>not found...</div>;
-  // }
-
   return (
     <div>
       <h3>{country.data.name.official} </h3>

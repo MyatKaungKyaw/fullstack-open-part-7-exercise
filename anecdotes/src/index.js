@@ -1,30 +1,31 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import { BrowserRouter as Router } from 'react-router-dom'
-import { useState } from 'react'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useState } from "react";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <Router>
-        <App />
-    </Router>)
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Router>
+    <App />
+  </Router>
+);
 
-export const useField = type => {
-    const [value, setValue] = useState('')
-    const onChange = event => {
-        setValue(event.target.value)
-    }
+export const useField = (type) => {
+  const [value, setValue] = useState("");
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
 
-    const reset = () => {
-        setValue('')
-    }
+  const reset = () => {
+    setValue("");
+  };
 
-    return {
-        reset,
-        element: {
-            type,
-            value,
-            onChange,
-        },
-    }
-}
+  return {
+    reset,
+    element: {
+      type,
+      value,
+      onChange,
+    },
+  };
+};

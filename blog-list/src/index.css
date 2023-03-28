@@ -1,0 +1,82 @@
+.notification-top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    background: #0FA3B1;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 14px;
+  }
+  .notification-top-bar p {
+    padding: 0;
+    margin: 0;
+  }
+  .notification-top-bar p a {
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: #FFF;
+    color: #1ABC9C;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+.err-notification-top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    background: #FF4242;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 14px;
+  }
+  .err-notification-top-bar p {
+    padding: 0;
+    margin: 0;
+  }
+  .err-notification-top-bar p a {
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: #FFF;
+    color: #1ABC9C;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+.show-notification-position{
+  margin-top: 40px;
+}
+
+.blog-url{
+  color: black;
+  text-decoration: none;
+}
+
+.blog-like{
+  display: inline;
+}
+
+.inline{
+  display: inline;
+}
+
+.blog-style {
+  padding-top: 10px;
+  padding-left: 2px;
+  border: solid;
+  border-width: 1px;
+  margin-bottom: 5px;
+}
+
+.delete-button{
+  background-color: #2874eb;
+}

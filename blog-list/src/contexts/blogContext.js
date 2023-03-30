@@ -17,7 +17,13 @@ export const BlogContextProvider = (props) =>{
     const [blog,blogDispatch] = useReducer(blogReducer,[])
     return(
         <blogContext.Provider value={[blog,blogDispatch]}>
-            {props}
+            {props.children}
         </blogContext.Provider>
     )
 }
+
+export const useBlogValue = () => useContext(blogContext)[0]
+
+export const useBlogDispatch = () => useContext(blogContext)[1]
+
+export default blogContext

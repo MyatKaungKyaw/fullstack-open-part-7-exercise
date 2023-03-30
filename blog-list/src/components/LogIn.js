@@ -1,24 +1,24 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 const LogIn = (props) => {
-  const [username, setUsername] = useState('')
-  const [password, setPasswod] = useState('')
+  const [username, setUsername] = useState("");
+  const [password, setPasswod] = useState("");
 
   const usernameOnChange = (e) => {
-    setUsername(e.target.value)
-  }
+    setUsername(e.target.value);
+  };
 
   const passwordOnChange = (e) => {
-    setPasswod(e.target.value)
-  }
+    setPasswod(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    await props.handleLogin(username, password)
-    setUsername('')
-    setPasswod('')
-  }
+    e.preventDefault();
+    await props.handleLogin(username, password);
+    setUsername("");
+    setPasswod("");
+  };
 
   return (
     <div>
@@ -27,8 +27,8 @@ const LogIn = (props) => {
         <div>
           username
           <input
-            type='text'
-            name='username'
+            type="text"
+            name="username"
             value={username}
             onChange={usernameOnChange}
           />
@@ -36,20 +36,20 @@ const LogIn = (props) => {
         <div>
           password
           <input
-            type='password'
-            name='password'
+            type="password"
+            name="password"
             value={password}
             onChange={passwordOnChange}
           />
         </div>
-        <button type='submit'>LogIn</button>
+        <button type="submit">LogIn</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 LogIn.propTypes = {
-  handleLogin: PropTypes.func.isRequired
-}
+  handleLogin: PropTypes.func.isRequired,
+};
 
-export default LogIn
+export default LogIn;

@@ -1,39 +1,39 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 const CreateBlog = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const titleOnChange = (e) => {
-    setTitle(e.target.value)
-  }
+    setTitle(e.target.value);
+  };
 
   const authorOnChange = (e) => {
-    setAuthor(e.target.value)
-  }
+    setAuthor(e.target.value);
+  };
 
   const urlOnChange = (e) => {
-    setUrl(e.target.value)
-  }
+    setUrl(e.target.value);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const blog = {
       title: title,
       author: author,
       url: url,
-    }
-    await props.createBlog(blog)
-    aftCreateBlogHandler()
-  }
+    };
+    await props.createBlog(blog);
+    aftCreateBlogHandler();
+  };
 
   const aftCreateBlogHandler = () => {
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-  }
+    setTitle("");
+    setAuthor("");
+    setUrl("");
+  };
 
   return (
     <div>
@@ -42,41 +42,41 @@ const CreateBlog = (props) => {
         <div>
           title:
           <input
-            type='text'
-            name='title'
+            type="text"
+            name="title"
             value={title}
             onChange={titleOnChange}
-            placeholder='title'
+            placeholder="title"
           />
         </div>
         <div>
           author:
           <input
-            type='text'
-            name='author'
+            type="text"
+            name="author"
             value={author}
             onChange={authorOnChange}
-            placeholder='author'
+            placeholder="author"
           />
         </div>
         <div>
           url:
           <input
-            type='text'
-            name='url'
+            type="text"
+            name="url"
             value={url}
             onChange={urlOnChange}
-            placeholder='url'
+            placeholder="url"
           />
         </div>
-        <button type='submit'>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 CreateBlog.propTypes = {
-  createBlog: PropTypes.func.isRequired
-}
+  createBlog: PropTypes.func.isRequired,
+};
 
-export default CreateBlog
+export default CreateBlog;

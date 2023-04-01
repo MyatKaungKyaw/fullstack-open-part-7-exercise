@@ -7,7 +7,7 @@ import NotificationBar from "./components/NotificationBar";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Main from "./components/Main";
-import { useQuery } from 'react-query'
+import { useQuery } from "react-query";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -99,9 +99,9 @@ const App = () => {
     }
   };
 
-  const blogsResult = useQuery('blogs', getAll, {
+  const blogsResult = useQuery("blogs", getAll, {
     refetchOnWindowFocus: false,
-  })
+  });
 
   // const blogs = blogsResult.data
 
@@ -134,10 +134,11 @@ const App = () => {
   return (
     <Main>
       {user === null && <LogIn handleLogin={handleLogin} />}
-      {user !== null && (
-        blogsResult.isLoading
-          ? <div>Loading data...</div>
-          : <>
+      {user !== null &&
+        (blogsResult.isLoading ? (
+          <div>Loading data...</div>
+        ) : (
+          <>
             <h2>blogs</h2>
             <p>{user.name} logged in</p>
             <button onClick={handleLogOut}>logout</button>
@@ -152,7 +153,7 @@ const App = () => {
               deleteBlog={deleteBlog}
             />
           </>
-      )}
+        ))}
     </Main>
   );
 };

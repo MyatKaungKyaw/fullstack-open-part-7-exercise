@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import BlogList from "./components/BlogList";
 import LogIn from "./components/LogIn";
 import CreateBlog from "./components/CreateBlog";
@@ -6,6 +6,8 @@ import Togglable from "./components/Togglable";
 import NotificationBar from "./components/NotificationBar";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Main from "./components/Main";
+import { useQuery } from 'react-query'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,9 +15,10 @@ const App = () => {
   //notification
   const [message, setMessage] = useState(null);
   const [isErrMsg, setIsErrMsg] = useState(false);
-
   //ref
   const createBlogRef = useRef();
+  //useContext
+  //const MessageContext = useContext(null)
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem("loggedInUser");
@@ -96,6 +99,12 @@ const App = () => {
     }
   };
 
+  const blogsResult = useQuery('blogs', getAll, {
+    refetchOnWindowFocus: false,
+  })
+
+  // const blogs = blogsResult.data
+
   const setAllBlogs = async () => {
     const returnBlogs = await blogService.getAll();
     const sortBlogs = sortBlogsDesc(returnBlogs);
@@ -123,12 +132,12 @@ const App = () => {
   };
 
   return (
-    <>
-      <NotificationBar message={message} isErr={isErrMsg} />
-      <div className={message !== null ? "show-notification-position" : ""}>
-        {user === null && <LogIn handleLogin={handleLogin} />}
-        {user !== null && (
-          <>
+    <Main>
+      {user === null && <LogIn handleLogin={handleLogin} />}
+      {user !== null && (
+        blogsResult.isLoading
+          ? <div>Loading data...</div>
+          : <>
             <h2>blogs</h2>
             <p>{user.name} logged in</p>
             <button onClick={handleLogOut}>logout</button>
@@ -143,9 +152,8 @@ const App = () => {
               deleteBlog={deleteBlog}
             />
           </>
-        )}
-      </div>
-    </>
+      )}
+    </Main>
   );
 };
 

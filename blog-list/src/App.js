@@ -99,9 +99,9 @@ const App = () => {
     }
   };
 
-  const blogsResult = useQuery("blogs", getAll, {
-    refetchOnWindowFocus: false,
-  });
+  // const blogsResult = useQuery("blogs", blogService.getAll, {
+  //   refetchOnWindowFocus: false,
+  // });
 
   // const blogs = blogsResult.data
 

@@ -8,13 +8,13 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Main from "./components/Main";
 import { useQuery } from 'react-query'
+import { useMessageDispatch } from "./contexts/MessageContext";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   //notification
-  const [message, setMessage] = useState(null);
-  const [isErrMsg, setIsErrMsg] = useState(false);
+  const messageDispatch = useMessageDispatch()
   //ref
   const createBlogRef = useRef();
   //useContext
@@ -99,9 +99,9 @@ const App = () => {
     }
   };
 
-  const blogsResult = useQuery('blogs', getAll, {
-    refetchOnWindowFocus: false,
-  })
+  // const blogsResult = useQuery('blogs', blogService.getAll, {
+  //   refetchOnWindowFocus: false,
+  // })
 
   // const blogs = blogsResult.data
 
@@ -115,19 +115,23 @@ const App = () => {
     blogArr.sort((a, b) => (a.likes > b.likes ? -1 : 0));
 
   const showMsg = (message) => {
-    setMessage(message);
-    setIsErrMsg(false);
+    messageDispatch({
+      type:'updateMessage',
+      message: message,
+    })
     setTimeout(() => {
-      setMessage(null);
+      messageDispatch({type:'reset'})
     }, 5000);
   };
-
+  
   const showErrMsg = (message) => {
-    setMessage(message);
-    setIsErrMsg(true);
+    messageDispatch({
+      type:'updateMessage',
+      message: message,
+    })
+    messageDispatch({type:'updateErrStatus'})
     setTimeout(() => {
-      setMessage(null);
-      setIsErrMsg(true);
+      messageDispatch({type:'reset'})
     }, 5000);
   };
 

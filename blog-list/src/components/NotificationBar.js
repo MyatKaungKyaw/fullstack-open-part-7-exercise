@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
+import { useMessageValue } from "../contexts/MessageContext";
 
-const NotificationBar = ({ message, isErr }) => {
+const NotificationBar = () => {
+  const messageValue = useMessageValue()
+  const message = messageValue.message
+  const isErr = messageValue.isErrMsg
   if (message === null) return null;
   return (
     <div
@@ -9,11 +13,6 @@ const NotificationBar = ({ message, isErr }) => {
       <p>{message}</p>
     </div>
   );
-};
-
-NotificationBar.propTypes = {
-  message: PropTypes.string,
-  isErr: PropTypes.bool.isRequired,
 };
 
 export default NotificationBar;

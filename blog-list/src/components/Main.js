@@ -4,7 +4,7 @@ const Main = (props) => {
     return (
         <>
         <NotificationBar/>
-        <div className={message !== null ? "show-notification-position" : ""}>
+        <div className={props.message !== null ? "show-notification-position" : ""}>
           {props.children}
         </div>
       </>

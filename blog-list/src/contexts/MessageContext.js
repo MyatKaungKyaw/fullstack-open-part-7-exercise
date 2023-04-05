@@ -33,7 +33,7 @@ export const MessageContextProvider = (props) => {
     isErrMsg: false,
   });
   return (
-    <MessageContext.Provider data={[message, messageDispatch]}>
+    <MessageContext.Provider value={[message, messageDispatch]}>
       {props.children}
     </MessageContext.Provider>
   );

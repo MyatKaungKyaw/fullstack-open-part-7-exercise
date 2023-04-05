@@ -138,10 +138,11 @@ const App = () => {
   return (
     <Main>
       {user === null && <LogIn handleLogin={handleLogin} />}
-      {user !== null && (
-        blogsResult.isLoading
-          ? <div>Loading data...</div>
-          : <>
+      {user !== null &&
+        (blogsResult.isLoading ? (
+          <div>Loading data...</div>
+        ) : (
+          <>
             <h2>blogs</h2>
             <p>{user.name} logged in</p>
             <button onClick={handleLogOut}>logout</button>
@@ -156,7 +157,7 @@ const App = () => {
               deleteBlog={deleteBlog}
             />
           </>
-      )}
+        ))}
     </Main>
   );
 };

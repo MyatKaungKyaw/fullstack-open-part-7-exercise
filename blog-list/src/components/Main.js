@@ -1,4 +1,4 @@
-import NotificationBar from "./NotificationBar"
+import NotificationBar from "./NotificationBar";
 
 const Main = (props) => {
     return (
@@ -10,5 +10,3 @@ const Main = (props) => {
       </>
     )
 }
-
-export default Main

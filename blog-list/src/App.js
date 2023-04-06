@@ -11,7 +11,7 @@ import { useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   //notification
   const messageDispatch = useMessageDispatch()
@@ -71,7 +71,7 @@ const App = () => {
       const sortBlogs = sortBlogsDesc(
         blogs.map((blog) => (blog.id === likeIncBlog.id ? likeIncBlog : blog))
       );
-      setBlogs(sortBlogs);
+      // setBlogs(sortBlogs);
       await blogService.update(likeIncBlog);
     } catch (err) {
       await setAllBlogs();
@@ -99,16 +99,10 @@ const App = () => {
     }
   };
 
-  // const blogsResult = useQuery('blogs', blogService.getAll, {
-  //   refetchOnWindowFocus: false,
-  // })
-
-  // const blogs = blogsResult.data
-
   const setAllBlogs = async () => {
     const returnBlogs = await blogService.getAll();
     const sortBlogs = sortBlogsDesc(returnBlogs);
-    setBlogs(sortBlogs);
+    // setBlogs(sortBlogs);
   };
 
   const sortBlogsDesc = (blogArr) =>
@@ -116,48 +110,58 @@ const App = () => {
 
   const showMsg = (message) => {
     messageDispatch({
-      type:'updateMessage',
+      type: 'updateMessage',
       message: message,
     })
     setTimeout(() => {
-      messageDispatch({type:'reset'})
+      messageDispatch({ type: 'reset' })
     }, 5000);
   };
-  
+
   const showErrMsg = (message) => {
     messageDispatch({
-      type:'updateMessage',
+      type: 'updateMessage',
       message: message,
     })
-    messageDispatch({type:'updateErrStatus'})
+    messageDispatch({ type: 'updateErrStatus' })
     setTimeout(() => {
-      messageDispatch({type:'reset'})
+      messageDispatch({ type: 'reset' })
     }, 5000);
   };
+
+  const blogsResult = useQuery('blogs', blogService.getAll, {
+    refetchOnWindowFocus: false,
+  })
+
+  if (user === null) {
+    return (<Main>
+      <LogIn handleLogin={handleLogin} />
+    </Main>)
+  }
+
+  if (blogsResult.isLoading) {
+    return (<Main>
+      <div>Loading data...</div>
+    </Main>)
+  }
+
+  const blogs = blogsResult.data
 
   return (
     <Main>
-      {user === null && <LogIn handleLogin={handleLogin} />}
-      {user !== null &&
-        (blogsResult.isLoading ? (
-          <div>Loading data...</div>
-        ) : (
-          <>
-            <h2>blogs</h2>
-            <p>{user.name} logged in</p>
-            <button onClick={handleLogOut}>logout</button>
+      <h2>blogs</h2>
+      <p>{user.name} logged in</p>
+      <button onClick={handleLogOut}>logout</button>
 
-            <Togglable text="new blog" ref={createBlogRef}>
-              <CreateBlog createBlog={createBlog} />
-            </Togglable>
-            <BlogList
-              blogs={blogs}
-              handleLikeClick={handleLikeClick}
-              user={user}
-              deleteBlog={deleteBlog}
-            />
-          </>
-        ))}
+      <Togglable text="new blog" ref={createBlogRef}>
+        <CreateBlog createBlog={createBlog} />
+      </Togglable>
+      <BlogList
+        blogs={blogs}
+        handleLikeClick={handleLikeClick}
+        user={user}
+        deleteBlog={deleteBlog}
+      />
     </Main>
   );
 };

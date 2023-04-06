@@ -7,11 +7,12 @@ import NotificationBar from "./components/NotificationBar";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Main from "./components/Main";
-import { useQuery } from 'react-query'
+import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 
 const App = () => {
   // const [blogs, setBlogs] = useState([]);
+  const queryClient = useQueryClient()
   const [user, setUser] = useState(null);
   //notification
   const messageDispatch = useMessageDispatch()
@@ -20,10 +21,22 @@ const App = () => {
   //useContext
   //const MessageContext = useContext(null)
 
+  const newBlogMutation = useMutation(blogService.create,{
+    onSuccess: newBlog => {
+      const blogs = queryClient.getQueryData('blogs')
+      const sortBlogs = sortBlogsDesc(blogs.concat(newBlog))
+      queryClient.setQueryData('blogs',sortBlogs)
+    }
+  })
+
+  const updateBlogMutation = useMutation(blogService.update,{
+    onS
+  })
+  
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem("loggedInUser");
     if (loggedInUser) {
-      setAllBlogs();
+      // setAllBlogs();
       setUserRelated(JSON.parse(loggedInUser));
     }
     // eslint-disable-next-line
@@ -33,7 +46,7 @@ const App = () => {
     try {
       const loginUser = await loginService.validateUser({ username, password });
 
-      await setAllBlogs();
+      // await setAllBlogs();
       window.localStorage.setItem("loggedInUser", JSON.stringify(loginUser));
       setUserRelated(loginUser);
     } catch (err) {
@@ -44,10 +57,11 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
-      const returnBlog = await blogService.create(blog);
+      // const returnBlog = await blogService.create(blog);
+      newBlogMutation.mutate(blog)
       createBlogRef.current.hide();
+      // await setAllBlogs();
       showMsg(`a new blog ${returnBlog.title} added`);
-      await setAllBlogs();
     } catch (err) {
       console.error(err);
     }
@@ -129,16 +143,18 @@ const App = () => {
     }, 5000);
   };
 
-  const blogsResult = useQuery('blogs', blogService.getAll, {
-    refetchOnWindowFocus: false,
-  })
-
+  
   if (user === null) {
     return (<Main>
       <LogIn handleLogin={handleLogin} />
     </Main>)
   }
-
+ 
+  //query
+  const blogsResult = useQuery('blogs', blogService.getAll, {
+    refetchOnWindowFocus: false,
+  })
+  
   if (blogsResult.isLoading) {
     return (<Main>
       <div>Loading data...</div>

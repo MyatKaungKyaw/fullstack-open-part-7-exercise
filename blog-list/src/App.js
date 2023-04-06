@@ -30,7 +30,10 @@ const App = () => {
   })
 
   const updateBlogMutation = useMutation(blogService.update,{
-    onS
+    onSuccess: updBlog => {
+      const blogs = queryClient.getQueryData('blogs')
+      const sortBlogs = sortBlogsDesc(blogs.map(blog => blog.id === updBlog.id ? updBlog : blog))
+    }
   })
   
   useEffect(() => {
@@ -61,7 +64,7 @@ const App = () => {
       newBlogMutation.mutate(blog)
       createBlogRef.current.hide();
       // await setAllBlogs();
-      showMsg(`a new blog ${returnBlog.title} added`);
+      showMsg(`a new blog ${blog.title} added`);
     } catch (err) {
       console.error(err);
     }
@@ -88,7 +91,7 @@ const App = () => {
       // setBlogs(sortBlogs);
       await blogService.update(likeIncBlog);
     } catch (err) {
-      await setAllBlogs();
+      // await setAllBlogs();
       console.error(err);
     }
   };
@@ -142,6 +145,13 @@ const App = () => {
       messageDispatch({ type: 'reset' })
     }, 5000);
   };
+  
+   //query
+   const blogsResult = useQuery('blogs', blogService.getAll, {
+     refetchOnWindowFocus: false,
+   })
+
+   console.log(blogsResult)
 
   
   if (user === null) {
@@ -149,11 +159,6 @@ const App = () => {
       <LogIn handleLogin={handleLogin} />
     </Main>)
   }
- 
-  //query
-  const blogsResult = useQuery('blogs', blogService.getAll, {
-    refetchOnWindowFocus: false,
-  })
   
   if (blogsResult.isLoading) {
     return (<Main>

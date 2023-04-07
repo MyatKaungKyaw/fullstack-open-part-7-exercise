@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import BlogList from "./components/BlogList";
 import LogIn from "./components/LogIn";
 import CreateBlog from "./components/CreateBlog";
 import Togglable from "./components/Togglable";
-import NotificationBar from "./components/NotificationBar";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Main from "./components/Main";
@@ -11,45 +10,46 @@ import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 
 const App = () => {
-  // const [blogs, setBlogs] = useState([]);
   const queryClient = useQueryClient()
   const [user, setUser] = useState(null);
   //notification
   const messageDispatch = useMessageDispatch()
   //ref
   const createBlogRef = useRef();
-  //useContext
-  //const MessageContext = useContext(null)
 
-  const newBlogMutation = useMutation(blogService.create,{
+  const newBlogMutation = useMutation(blogService.create, {
     onSuccess: newBlog => {
       const blogs = queryClient.getQueryData('blogs')
       const sortBlogs = sortBlogsDesc(blogs.concat(newBlog))
-      queryClient.setQueryData('blogs',sortBlogs)
+      queryClient.setQueryData('blogs', sortBlogs)
     }
   })
 
-  const updateBlogMutation = useMutation(blogService.update,{
+  const updateBlogMutation = useMutation(blogService.update, {
     onSuccess: updBlog => {
       const blogs = queryClient.getQueryData('blogs')
       const sortBlogs = sortBlogsDesc(blogs.map(blog => blog.id === updBlog.id ? updBlog : blog))
+      queryClient.setQueryData('blogs', sortBlogs)
     }
   })
-  
+
+  const deleteBlogMutataion = useMutation(blogService.remove, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('blogs')
+    }
+  })
+
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem("loggedInUser");
     if (loggedInUser) {
-      // setAllBlogs();
       setUserRelated(JSON.parse(loggedInUser));
     }
-    // eslint-disable-next-line
   }, []);
 
   const handleLogin = async (username, password) => {
     try {
       const loginUser = await loginService.validateUser({ username, password });
 
-      // await setAllBlogs();
       window.localStorage.setItem("loggedInUser", JSON.stringify(loginUser));
       setUserRelated(loginUser);
     } catch (err) {
@@ -60,10 +60,8 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
-      // const returnBlog = await blogService.create(blog);
       newBlogMutation.mutate(blog)
       createBlogRef.current.hide();
-      // await setAllBlogs();
       showMsg(`a new blog ${blog.title} added`);
     } catch (err) {
       console.error(err);
@@ -85,21 +83,15 @@ const App = () => {
         likes: blog.likes + 1,
         user: blog.user && blog.user.id,
       };
-      const sortBlogs = sortBlogsDesc(
-        blogs.map((blog) => (blog.id === likeIncBlog.id ? likeIncBlog : blog))
-      );
-      // setBlogs(sortBlogs);
-      await blogService.update(likeIncBlog);
+      updateBlogMutation.mutate(likeIncBlog)
     } catch (err) {
-      // await setAllBlogs();
       console.error(err);
     }
   };
 
   const deleteBlog = async (blogId) => {
     try {
-      await blogService.remove(blogId);
-      await setAllBlogs();
+      deleteBlogMutataion.mutate(blogId)
     } catch (err) {
       console.error(err);
     }
@@ -114,12 +106,6 @@ const App = () => {
       setUser(null);
       blogService.setToken(null);
     }
-  };
-
-  const setAllBlogs = async () => {
-    const returnBlogs = await blogService.getAll();
-    const sortBlogs = sortBlogsDesc(returnBlogs);
-    // setBlogs(sortBlogs);
   };
 
   const sortBlogsDesc = (blogArr) =>
@@ -145,28 +131,26 @@ const App = () => {
       messageDispatch({ type: 'reset' })
     }, 5000);
   };
-  
-   //query
-   const blogsResult = useQuery('blogs', blogService.getAll, {
-     refetchOnWindowFocus: false,
-   })
 
-   console.log(blogsResult)
+  //query
+  const blogsResult = useQuery('blogs', blogService.getAll, {
+    refetchOnWindowFocus: false,
+  })
 
-  
+
   if (user === null) {
     return (<Main>
       <LogIn handleLogin={handleLogin} />
     </Main>)
   }
-  
+
   if (blogsResult.isLoading) {
     return (<Main>
       <div>Loading data...</div>
     </Main>)
   }
 
-  const blogs = blogsResult.data
+  const blogs = sortBlogsDesc(blogsResult.data)
 
   return (
     <Main>

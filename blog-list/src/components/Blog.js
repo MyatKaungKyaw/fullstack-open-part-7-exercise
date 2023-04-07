@@ -1,8 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useUserValue } from "../contexts/UserContext";
 
-const Blog = ({ blog, handleLikeClick, user, deleteBlog }) => {
+const Blog = ({ blog, handleLikeClick, deleteBlog }) => {
   const [visible, setVisible] = useState(false);
+  const user = useUserValue()
 
   const show = (e) => {
     setVisible(true);
@@ -66,7 +68,6 @@ const Blog = ({ blog, handleLikeClick, user, deleteBlog }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLikeClick: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
   deleteBlog: PropTypes.func.isRequired,
 };
 

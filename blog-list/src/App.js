@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import BlogList from "./components/BlogList";
 import LogIn from "./components/LogIn";
 import CreateBlog from "./components/CreateBlog";
@@ -8,10 +8,13 @@ import loginService from "./services/login";
 import Main from "./components/Main";
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
+import { useUserDispatch, useUserValue } from "./contexts/UserContext";
 
 const App = () => {
   const queryClient = useQueryClient()
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
+  const userDispatch = useUserDispatch()
+  const user = useUserValue()
   //notification
   const messageDispatch = useMessageDispatch()
   //ref
@@ -100,10 +103,17 @@ const App = () => {
   //helper functions
   const setUserRelated = (user) => {
     if (user !== null) {
-      setUser(user);
+      // setUser(user);
+      userDispatch({
+        type:'update',
+        user,
+      })
       blogService.setToken(user.token);
     } else {
-      setUser(null);
+      // setUser(null);
+      userDispatch({
+        type:'reset',
+      })
       blogService.setToken(null);
     }
   };

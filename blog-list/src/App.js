@@ -22,6 +22,7 @@ const App = () => {
       const blogs = queryClient.getQueryData('blogs')
       const sortBlogs = sortBlogsDesc(blogs.concat(newBlog))
       queryClient.setQueryData('blogs', sortBlogs)
+      showMsg(`a new blog ${newBlog.title} added`);
     }
   })
 
@@ -62,7 +63,6 @@ const App = () => {
     try {
       newBlogMutation.mutate(blog)
       createBlogRef.current.hide();
-      showMsg(`a new blog ${blog.title} added`);
     } catch (err) {
       console.error(err);
     }

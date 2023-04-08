@@ -6,6 +6,7 @@ import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Main from "./components/Main";
+import UserList from './components/UserList'
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
@@ -167,6 +168,8 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogOut}>logout</button>
+      
+      <UserList/>
 
       <Togglable text="new blog" ref={createBlogRef}>
         <CreateBlog createBlog={createBlog} />

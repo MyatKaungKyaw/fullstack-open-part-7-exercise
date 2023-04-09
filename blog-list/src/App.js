@@ -13,7 +13,6 @@ import { useUserDispatch, useUserValue } from "./contexts/UserContext";
 
 const App = () => {
   const queryClient = useQueryClient()
-  // const [user, setUser] = useState(null);
   const userDispatch = useUserDispatch()
   const user = useUserValue()
   //notification

@@ -13,7 +13,6 @@ const UserList = () => {
     }
 
     const users = usersResult.data
-    console.log(users)
     return (
         <>
             <h2>Users</h2>

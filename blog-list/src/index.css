@@ -80,3 +80,24 @@
 .delete-button {
   background-color: #2874eb;
 }
+
+.user-grid-container {
+  display: grid;
+  grid-gap: 10px;
+  padding-bottom: 2em;
+}
+
+.user-grid-item {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 10em 10em;
+  grid-row-gap: 10px;
+}
+
+.user-name {
+  grid-column: 1 / span 1;
+}
+
+.user-blog {
+  grid-column: 2 / span 1;
+}

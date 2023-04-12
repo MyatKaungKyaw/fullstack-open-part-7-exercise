@@ -51,6 +51,8 @@ const App = () => {
     const loggedInUser = window.localStorage.getItem("loggedInUser");
     if (loggedInUser) {
       setUserRelated(JSON.parse(loggedInUser));
+    } else {
+      navigate('/login')
     }
   }, []);
 
@@ -106,7 +108,7 @@ const App = () => {
   };
 
   //helper functions
-  const setUserRelated = (user) => {
+  function setUserRelated(user) {
     if (user !== null) {
       // setUser(user);
       userDispatch({
@@ -166,18 +168,6 @@ const App = () => {
     ? users.find(user => user.id === userDetailMatch.params.id)
     : null
 
-  // if (user === null) {
-  //   return (<Main>
-  //     <LogIn handleLogin={handleLogin} />
-  //   </Main>)
-  // }
-
-  // if (blogsResult.isLoading) {
-  //   return (<Main>
-  //     <div>Loading data...</div>
-  //   </Main>)
-  // }
-
   const blogs = blogsResult.isLoading
     ? null
     : sortBlogsDesc(blogsResult.data)
@@ -188,39 +178,35 @@ const App = () => {
       <Togglable text="new blog" ref={createBlogRef}>
         <CreateBlog createBlog={createBlog} />
       </Togglable>
-      <BlogList
-        blogs={blogs}
-        handleLikeClick={handleLikeClick}
-        user={user}
-        deleteBlog={deleteBlog}
-      />
+      {blogsResult.isLoading
+        ? <div>Loading blogs data</div>
+        : <BlogList
+          blogs={blogs}
+          handleLikeClick={handleLikeClick}
+          user={user}
+          deleteBlog={deleteBlog}
+        />
+      }
     </>
   )
-
-
 
   return (
     <>
       <Main>
-        {logInMatch
-          ? null
-          : blogsResult.isLoading
-            ? <div>Loading blogs data</div>
-            : (
-              <>
-                <h2>blogs</h2>
-                <p>{user.name} logged in</p>
-                <button onClick={handleLogOut}>logout</button>
-              </>
-            )
+        {!logInMatch && user !== null
+          && (<>
+            <h2>blogs</h2>
+            <p>{user.name} logged in</p>
+            <button onClick={handleLogOut}>logout</button>
+          </>)
         }
-        <Routes>
+        < Routes >
           <Route path='/users/:id' element={<UserDetail {...userDetail} />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
-          <Route path='/' element={user === null ? <Navigate replace to='/login' /> : <Blogs />} />
+          <Route path='/' element={<Blogs />} />
         </Routes>
-      </Main>
+      </Main >
     </>
   );
 };

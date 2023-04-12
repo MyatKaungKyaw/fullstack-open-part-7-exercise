@@ -1,12 +1,11 @@
-const UserDetail = (detail) => {
-    console.log('detail',detail)
-    const name = detail.name
-    const blogs = detail.blogs
+const UserDetail = (props) => {
+    const name = props.name
+    const blogs = props.blogs
 
-    if(!detail){
+    if (!props.name) {
         return null
     }
-    
+
     return (
         <>
             <h2>{name}</h2>

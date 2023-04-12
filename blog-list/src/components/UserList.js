@@ -2,18 +2,12 @@ import { useState } from 'react'
 import userService from '../services/users'
 import { useQuery } from 'react-query'
 import UserDetail from './UserDetail'
+import { Link } from 'react-router-dom'
 
 const UserList = () => {
-    const [name,setName]=useState(null)
-    const [blogs,setBlogs]=useState([])
-    const usersResult = useQuery('userrs', userService.getAll, {
+    const usersResult = useQuery('users', userService.getAll, {
         refetchOnWindowFocus: false,
     })
-
-    const userDetailClick = (user) =>{
-        setName(user.name)
-        setBlogs(user.blogs)
-    }
 
     if (usersResult.isLoading) {
         return (
@@ -22,6 +16,7 @@ const UserList = () => {
     }
 
     const users = usersResult.data
+
     return (
         <>
             <h2>Users</h2>
@@ -31,17 +26,11 @@ const UserList = () => {
                 </div>
                 {users.map((user) => (
                     <div className="user-grid-item" key={user.id}>
-                        <div 
-                        className="user-name"
-                        onClick={() => userDetailClick(user)}
-                        name={user.name}
-                        blogs={user.blogs}
-                        >{user.name}</div>
+                        <Link className="user-name" to={`/users/{user.id}`}>{user.name}</Link>
                         <div className="user-blog">{user.blogs.length}</div>
                     </div>
                 ))}
             </div>
-            {name && <UserDetail name={name} blogs={blogs}/>}
         </>
     )
 }

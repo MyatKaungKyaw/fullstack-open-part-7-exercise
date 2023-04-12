@@ -5,11 +5,14 @@ import CreateBlog from "./components/CreateBlog";
 import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import userService from './services/users'
 import Main from "./components/Main";
 import UserList from './components/UserList'
+import UserDetail from "./components/UserDetail";
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
+import { Route, Routes, useMatch } from "react-router-dom";
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -105,14 +108,14 @@ const App = () => {
     if (user !== null) {
       // setUser(user);
       userDispatch({
-        type:'update',
+        type: 'update',
         user,
       })
       blogService.setToken(user.token);
     } else {
       // setUser(null);
       userDispatch({
-        type:'reset',
+        type: 'reset',
       })
       blogService.setToken(null);
     }
@@ -147,6 +150,18 @@ const App = () => {
     refetchOnWindowFocus: false,
   })
 
+  const usersResult = useQuery('users', userService.getAll, {
+    refetchOnWindowFocus: false,
+  })
+
+  const users = usersResult.data
+
+  //useMatch
+  const userDetailMatch = useMatch('/users/:id')
+  console.log('userDetail', queryClient.getQueryData('users'))
+  const userDetail = userDetailMatch && !usersResult.isLoading
+    ? users.find(user => user.id === userDetailMatch.params.id)
+    : null
 
   if (user === null) {
     return (<Main>
@@ -162,14 +177,9 @@ const App = () => {
 
   const blogs = sortBlogsDesc(blogsResult.data)
 
-  return (
-    <Main>
-      <h2>blogs</h2>
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogOut}>logout</button>
-      
-      <UserList/>
-
+  //components
+  const Blogs = () => (
+    <>
       <Togglable text="new blog" ref={createBlogRef}>
         <CreateBlog createBlog={createBlog} />
       </Togglable>
@@ -179,6 +189,20 @@ const App = () => {
         user={user}
         deleteBlog={deleteBlog}
       />
+    </>
+  )
+
+  return (
+    <Main>
+      <h2>blogs</h2>
+      <p>{user.name} logged in</p>
+      <button onClick={handleLogOut}>logout</button>
+      <Routes>
+        <Route path='/users/:id' element={<UserDetail detail={userDetail} />} />
+        <Route path='/users' element={<UserList />} />
+        <Route path='/' element={<Blogs />} />
+      </Routes>
+
     </Main>
   );
 };

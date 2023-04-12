@@ -12,10 +12,11 @@ import UserDetail from "./components/UserDetail";
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
-import { Route, Routes, useMatch } from "react-router-dom";
+import { useNavigate, Navigate, Route, Routes, useMatch } from "react-router-dom";
 
 const App = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const userDispatch = useUserDispatch()
   const user = useUserValue()
   //notification
@@ -59,6 +60,7 @@ const App = () => {
 
       window.localStorage.setItem("loggedInUser", JSON.stringify(loginUser));
       setUserRelated(loginUser);
+      navigate('/')
     } catch (err) {
       showErrMsg("username or password incorrect");
       console.error(err);
@@ -155,27 +157,30 @@ const App = () => {
   })
 
   const users = usersResult.data
+  console.log(user)
 
   //useMatch
+  const logInMatch = useMatch('/login')
   const userDetailMatch = useMatch('/users/:id')
-  console.log('userDetail', queryClient.getQueryData('users'))
   const userDetail = userDetailMatch && !usersResult.isLoading
     ? users.find(user => user.id === userDetailMatch.params.id)
     : null
 
-  if (user === null) {
-    return (<Main>
-      <LogIn handleLogin={handleLogin} />
-    </Main>)
-  }
+  // if (user === null) {
+  //   return (<Main>
+  //     <LogIn handleLogin={handleLogin} />
+  //   </Main>)
+  // }
 
-  if (blogsResult.isLoading) {
-    return (<Main>
-      <div>Loading data...</div>
-    </Main>)
-  }
+  // if (blogsResult.isLoading) {
+  //   return (<Main>
+  //     <div>Loading data...</div>
+  //   </Main>)
+  // }
 
-  const blogs = sortBlogsDesc(blogsResult.data)
+  const blogs = blogsResult.isLoading
+    ? null
+    : sortBlogsDesc(blogsResult.data)
 
   //components
   const Blogs = () => (
@@ -192,18 +197,31 @@ const App = () => {
     </>
   )
 
-  return (
-    <Main>
-      <h2>blogs</h2>
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogOut}>logout</button>
-      <Routes>
-        <Route path='/users/:id' element={<UserDetail detail={userDetail} />} />
-        <Route path='/users' element={<UserList />} />
-        <Route path='/' element={<Blogs />} />
-      </Routes>
 
-    </Main>
+
+  return (
+    <>
+      <Main>
+        {logInMatch
+          ? null
+          : blogsResult.isLoading
+            ? <div>Loading blogs data</div>
+            : (
+              <>
+                <h2>blogs</h2>
+                <p>{user.name} logged in</p>
+                <button onClick={handleLogOut}>logout</button>
+              </>
+            )
+        }
+        <Routes>
+          <Route path='/users/:id' element={<UserDetail {...userDetail} />} />
+          <Route path='/users' element={<UserList />} />
+          <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
+          <Route path='/' element={user === null ? <Navigate replace to='/login' /> : <Blogs />} />
+        </Routes>
+      </Main>
+    </>
   );
 };
 

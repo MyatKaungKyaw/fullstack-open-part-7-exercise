@@ -57,13 +57,6 @@ const App = () => {
     }
   }, []);
 
-  console.log(user)
-  // useEffect(() => {
-  //   if(user === null){
-  //     navigate('/login')
-  //   }
-  // },[user])
-
   const handleLogin = async (username, password) => {
     try {
       const loginUser = await loginService.validateUser({ username, password });
@@ -118,14 +111,12 @@ const App = () => {
   //helper functions
   const setUserRelated = (user) => {
     if (user !== null) {
-      // setUser(user);
       userDispatch({
         type: 'update',
         user,
       })
       blogService.setToken(user.token);
     } else {
-      // setUser(null);
       userDispatch({
         type: 'reset',
       })
@@ -185,12 +176,6 @@ const App = () => {
     : null
 
   const homeMatch = useMatch('/')
-  // if(homeMatch){
-  //   const loggedInUser = window.localStorage.getItem("loggedInUser");
-  //   if (loggedInUser) {
-  //     setUserRelated(JSON.parse(loggedInUser));
-  //   }
-  // }
 
   //components
   const Blogs = () => (
@@ -226,7 +211,7 @@ const App = () => {
           <Route path='/users' element={<UserList />} />
           <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
           <Route path='/blogs/:id' element={<BlogDetail blog={blogDetail} likeClick={handleLikeClick} user={user} />} />
-          <Route path='/' element={<Blogs />}/>
+          <Route path='/' element={user === null ? <Navigate to ='/login'/> : <Blogs />}/>
         </Routes>
       </Main >
     </>

@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import userService from '../services/users'
 import { useQuery } from 'react-query'
-import UserDetail from './UserDetail'
 import { Link } from 'react-router-dom'
 
 const UserList = () => {

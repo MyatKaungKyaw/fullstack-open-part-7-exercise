@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import BlogList from "./components/BlogList";
+import BlogDetail from './components/BlogDetail'
 import LogIn from "./components/LogIn";
 import CreateBlog from "./components/CreateBlog";
 import Togglable from "./components/Togglable";
@@ -12,7 +13,7 @@ import UserDetail from "./components/UserDetail";
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
-import { useNavigate, Navigate, Route, Routes, useMatch } from "react-router-dom";
+import { Navigate, Route, Routes, useMatch, useNavigate, } from "react-router-dom";
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -55,6 +56,13 @@ const App = () => {
       navigate('/login')
     }
   }, []);
+
+  console.log(user)
+  // useEffect(() => {
+  //   if(user === null){
+  //     navigate('/login')
+  //   }
+  // },[user])
 
   const handleLogin = async (username, password) => {
     try {
@@ -108,7 +116,7 @@ const App = () => {
   };
 
   //helper functions
-  function setUserRelated(user) {
+  const setUserRelated = (user) => {
     if (user !== null) {
       // setUser(user);
       userDispatch({
@@ -159,7 +167,10 @@ const App = () => {
   })
 
   const users = usersResult.data
-  console.log(user)
+
+  const blogs = blogsResult.isLoading
+    ? null
+    : sortBlogsDesc(blogsResult.data)
 
   //useMatch
   const logInMatch = useMatch('/login')
@@ -168,9 +179,18 @@ const App = () => {
     ? users.find(user => user.id === userDetailMatch.params.id)
     : null
 
-  const blogs = blogsResult.isLoading
-    ? null
-    : sortBlogsDesc(blogsResult.data)
+  const blogDetailMatch = useMatch('/blogs/:id')
+  const blogDetail = blogDetailMatch
+    ? blogs.find(blog => blog.id === blogDetailMatch.params.id)
+    : null
+
+  const homeMatch = useMatch('/')
+  // if(homeMatch){
+  //   const loggedInUser = window.localStorage.getItem("loggedInUser");
+  //   if (loggedInUser) {
+  //     setUserRelated(JSON.parse(loggedInUser));
+  //   }
+  // }
 
   //components
   const Blogs = () => (
@@ -190,6 +210,7 @@ const App = () => {
     </>
   )
 
+
   return (
     <>
       <Main>
@@ -204,7 +225,8 @@ const App = () => {
           <Route path='/users/:id' element={<UserDetail {...userDetail} />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
-          <Route path='/' element={<Blogs />} />
+          <Route path='/blogs/:id' element={<BlogDetail blog={blogDetail} likeClick={handleLikeClick} user={user} />} />
+          <Route path='/' element={<Blogs />}/>
         </Routes>
       </Main >
     </>

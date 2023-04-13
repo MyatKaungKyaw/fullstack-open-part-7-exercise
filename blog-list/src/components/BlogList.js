@@ -1,23 +1,16 @@
-import Blog from "./Blog";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const BlogList = ({ blogs, handleLikeClick, deleteBlog }) => (
+const BlogList = ({ blogs }) => (
   <div>
     {blogs.map((blog) => (
-      <Blog
-        key={blog.id}
-        blog={blog}
-        handleLikeClick={handleLikeClick}
-        deleteBlog={deleteBlog}
-      />
+      <Link key={blog.id} className='blog-block' to={`/blogs/${blog.id}`}>{blog.title+' '+blog.author}</Link>
     ))}
   </div>
 );
 
 BlogList.propTpyes = {
   blogs: PropTypes.array.isRequired,
-  handleLikeClick: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
 };
 
 export default BlogList;

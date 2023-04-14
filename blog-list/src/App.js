@@ -13,7 +13,7 @@ import UserDetail from "./components/UserDetail";
 import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
-import { Navigate, Route, Routes, useMatch, useNavigate, } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useMatch, useNavigate, } from "react-router-dom";
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -200,18 +200,24 @@ const App = () => {
     <>
       <Main>
         {!logInMatch && user !== null
-          && (<>
-            <h2>blogs</h2>
-            <p>{user.name} logged in</p>
-            <button onClick={handleLogOut}>logout</button>
-          </>)
+          && (
+            <>
+              <div className='nav-menu'>
+                <Link to='/'>blogs</Link>
+                <Link to='/users'>users</Link>
+                <p>{user.name} logged in</p>
+                <button onClick={handleLogOut}>logout</button>
+              </div>
+                <h2>blog app</h2>
+            </>
+          )
         }
         < Routes >
           <Route path='/users/:id' element={<UserDetail {...userDetail} />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
           <Route path='/blogs/:id' element={<BlogDetail blog={blogDetail} likeClick={handleLikeClick} user={user} />} />
-          <Route path='/' element={user === null ? <Navigate to ='/login'/> : <Blogs />}/>
+          <Route path='/' element={user === null ? <Navigate to='/login' /> : <Blogs />} />
         </Routes>
       </Main >
     </>

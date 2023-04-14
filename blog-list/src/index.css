@@ -12,10 +12,12 @@
   font-weight: lighter;
   font-size: 14px;
 }
+
 .notification-top-bar p {
   padding: 0;
   margin: 0;
 }
+
 .notification-top-bar p a {
   padding: 5px 10px;
   border-radius: 3px;
@@ -39,10 +41,12 @@
   font-weight: lighter;
   font-size: 14px;
 }
+
 .err-notification-top-bar p {
   padding: 0;
   margin: 0;
 }
+
 .err-notification-top-bar p a {
   padding: 5px 10px;
   border-radius: 3px;
@@ -109,4 +113,17 @@
 
 .user-blog {
   grid-column: 2 / span 1;
+}
+
+.nav-menu {
+  align-items: center;
+  background-color: #1abc9c;
+  display: flex;
+  font-display: column;
+  height: 1.5em;
+  padding: 5px 0;
+}
+
+.nav-menu > *{
+  margin-right: 10px;
 }

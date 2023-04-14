@@ -1,0 +1,12 @@
+GET http://localhost:3003/api/blogs
+
+### add blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title":"15 Useful Custom React Hooks for Your Next Web App",
+    "author":"Chris1993",
+    "url":"https://medium.com/@Chris1993/15-useful-custom-react-hooks-for-your-next-web-app-c5902d868f4c",
+    "likes":56
+}

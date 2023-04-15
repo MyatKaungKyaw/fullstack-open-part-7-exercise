@@ -6,13 +6,17 @@ const blogSchema = new mongoose.Schema({
     author: String,
     url: String,
     likes: Number,
-    user:{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+    }],
 })
 
-blogSchema.set('toJSON',{
+blogSchema.set('toJSON', {
     transform: toJson.transformNormal
 })
 

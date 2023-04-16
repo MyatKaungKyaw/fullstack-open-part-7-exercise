@@ -1,6 +1,19 @@
-const BlogDetail = ({ blog, likeClick, user }) => {
+import { useState } from "react";
+
+const BlogDetail = ({ blog, likeClick, user, handleComment }) => {
+    const [comment, setComment] = useState('')
     const onLikeClick = async (e) => {
         await likeClick(blog);
+    }
+
+    const handleCommentSubmit = (e) => {
+        e.preventDefault()
+        handleComment(blog.id,comment)
+        setComment('')
+    }
+
+    const commentOnChange = (e) => {
+        setComment(e.target.value)
     }
 
     return (
@@ -22,10 +35,17 @@ const BlogDetail = ({ blog, likeClick, user }) => {
             </div>
             <div>added by {user.name}</div>
             <h4>comments</h4>
+            <form onSubmit={handleCommentSubmit}>
+                <input
+                    type='text'
+                    value={comment}
+                    name='comment'
+                    onChange={commentOnChange}
+                />
+                <button type='submit'>add comment</button>
+            </form>
             <ul>
-                {blog.comments.map(comment => (
-                    <li>{comment.comment}</li>
-                ))}
+                {blog.comments.map(comment => <li key={comment.id }>{comment.comment}</li>)}
             </ul>
         </div>
     )

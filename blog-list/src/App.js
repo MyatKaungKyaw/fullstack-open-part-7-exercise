@@ -199,8 +199,6 @@ const App = () => {
     ? blogs.find(blog => blog.id === blogDetailMatch.params.id)
     : null
 
-  const homeMatch = useMatch('/')
-
   //components
   const Blogs = () => (
     <>

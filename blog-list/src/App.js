@@ -48,6 +48,21 @@ const App = () => {
     }
   })
 
+  const addCommentBlogMutation = useMutation(blogService.addComment, {
+    onSuccess: res => {
+      const blogId = res.data.blogId
+      const comment = res.data.comment
+      const blogs = queryClient.getQueryData('blogs')
+      const sortBlogs = sortBlogsDesc(blogs.map(blog => {
+        if (blog.id === blogId) {
+          blog.comments = blog.comments.concat(comment)
+        }
+        return blog
+      }))
+      queryClient.setQueryData('blogs', sortBlogs)
+    }
+  })
+
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem("loggedInUser");
     if (loggedInUser) {
@@ -107,6 +122,15 @@ const App = () => {
       console.error(err);
     }
   };
+
+  const handleComment = async (blogId, comment) => {
+    try {
+      console.log('handle comment', comment)
+      addCommentBlogMutation.mutate({ blogId, comment })
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   //helper functions
   const setUserRelated = (user) => {
@@ -208,7 +232,7 @@ const App = () => {
                 <p>{user.name} logged in</p>
                 <button onClick={handleLogOut}>logout</button>
               </div>
-                <h2>blog app</h2>
+              <h2>blog app</h2>
             </>
           )
         }
@@ -216,7 +240,7 @@ const App = () => {
           <Route path='/users/:id' element={<UserDetail {...userDetail} />} />
           <Route path='/users' element={<UserList />} />
           <Route path='/login' element={<LogIn handleLogin={handleLogin} />} />
-          <Route path='/blogs/:id' element={<BlogDetail blog={blogDetail} likeClick={handleLikeClick} user={user} />} />
+          <Route path='/blogs/:id' element={<BlogDetail blog={blogDetail} likeClick={handleLikeClick} user={user} handleComment={handleComment} />} />
           <Route path='/' element={user === null ? <Navigate to='/login' /> : <Blogs />} />
         </Routes>
       </Main >

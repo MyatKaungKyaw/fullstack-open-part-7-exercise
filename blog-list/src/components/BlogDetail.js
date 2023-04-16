@@ -21,6 +21,12 @@ const BlogDetail = ({ blog, likeClick, user }) => {
                 </button>
             </div>
             <div>added by {user.name}</div>
+            <h4>comments</h4>
+            <ul>
+                {blog.comments.map(comment => (
+                    <li>{comment.comment}</li>
+                ))}
+            </ul>
         </div>
     )
 }

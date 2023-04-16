@@ -80,7 +80,6 @@ blogsRouter.patch('/:id', async (request, response) => {
 
 blogsRouter.post('/:id/comments', async (request, response) => {
     const comment = request.body.comment
-
     if(comment === null){
         return response.status(400).json({error:'comment is empty'})
     }
@@ -93,7 +92,10 @@ blogsRouter.post('/:id/comments', async (request, response) => {
     const result = await commentDoc.save()
     blog.comments = blog.comments.concat(commentDoc._id)
     await blog.save()
-    response.status(201).json(commentDoc)
+    response.status(201).json({
+        blogId : blog._id,
+        comment: commentDoc,
+    })
 })
 
 module.exports = blogsRouter

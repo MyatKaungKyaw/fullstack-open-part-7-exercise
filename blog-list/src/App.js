@@ -14,6 +14,12 @@ import { useQueryClient, useMutation, useQuery } from 'react-query'
 import { useMessageDispatch } from "./contexts/MessageContext";
 import { useUserDispatch, useUserValue } from "./contexts/UserContext";
 import { Link, Navigate, Route, Routes, useMatch, useNavigate, } from "react-router-dom";
+import {
+  Button,
+  Container,
+  AppBar,
+  Toolbar,
+} from '@mui/material'
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -219,17 +225,19 @@ const App = () => {
 
 
   return (
-    <>
+    <Container>
       <Main>
         {!logInMatch && user !== null
           && (
             <>
-              <div className='nav-menu'>
-                <Link to='/'>blogs</Link>
-                <Link to='/users'>users</Link>
-                <p>{user.name} logged in</p>
-                <button onClick={handleLogOut}>logout</button>
-              </div>
+              <AppBar position='static'>
+                  <Toolbar>
+                    <Button color='inherit' component={Link} to='/'>blogs</Button>
+                    <Button color='inherit' component={Link} to='/users'>users</Button>
+                    <p>{user.name} logged in</p>
+                    <Button color='inherit' onClick={handleLogOut}>logout</Button>
+                  </Toolbar>
+              </AppBar>
               <h2>blog app</h2>
             </>
           )
@@ -242,7 +250,7 @@ const App = () => {
           <Route path='/' element={user === null ? <Navigate to='/login' /> : <Blogs />} />
         </Routes>
       </Main >
-    </>
+    </Container>
   );
 };
 

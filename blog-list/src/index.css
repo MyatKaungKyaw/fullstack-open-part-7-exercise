@@ -73,15 +73,6 @@
   display: inline;
 }
 
-.blog-block {
-  display: block;
-  padding-top: 10px;
-  padding-left: 2px;
-  border: solid;
-  border-width: 1px;
-  margin-bottom: 5px;
-}
-
 .blog-style {
   padding-top: 10px;
   padding-left: 2px;
@@ -115,15 +106,6 @@
   grid-column: 2 / span 1;
 }
 
-.nav-menu {
-  align-items: center;
-  background-color: #1abc9c;
-  display: flex;
-  font-display: column;
-  height: 1.5em;
-  padding: 5px 0;
-}
-
-.nav-menu > *{
-  margin-right: 10px;
+.login > * > *{
+  margin-bottom: 10px;
 }

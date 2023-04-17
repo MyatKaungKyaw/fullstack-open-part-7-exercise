@@ -16,6 +16,10 @@ const BlogDetail = ({ blog, likeClick, user, handleComment }) => {
         setComment(e.target.value)
     }
 
+    if(blog === null){
+        return null
+    }
+
     return (
         <div>
             <h3>{blog.title + ' ' + blog.author}</h3>

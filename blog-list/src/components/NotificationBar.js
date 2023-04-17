@@ -1,16 +1,14 @@
 import { useMessageValue } from "../contexts/MessageContext";
+import { Alert } from '@mui/material'
 
 const NotificationBar = () => {
   const messageValue = useMessageValue()
   const message = messageValue.message
-  const isErr = messageValue.isErrMsg
   if (message === null) return null;
   return (
-    <div
-      className={isErr ? "err-notification-top-bar" : "notification-top-bar"}
-    >
+    <Alert>
       <p>{message}</p>
-    </div>
+    </Alert>
   );
 };
 
